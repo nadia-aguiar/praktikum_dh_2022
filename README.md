@@ -1,4 +1,4 @@
-** esse README estará sendo atualizado conforme evolução do projeto**
+**esse README estará sendo atualizado conforme evolução do projeto**
 
 Esse repositório faz parte do estágio obrigatório, módulo 8 - 3° Semestre -, do mestrado em Métodos digitais nas ciências humanas e sociais, da Universidade de Mainz, na cidade de Mogúncia na Alemanha. 
 
