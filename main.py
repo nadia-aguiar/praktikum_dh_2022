@@ -31,9 +31,11 @@ class Aceno:
         #CSS Selector
         self.return_page_article = "/html/body/div[1]/div[1]/div[1]/div/article/div/div[2]/div[4]/section[1]/div/a" #XPATH
 
+
     #function to open the link of the journal Aceno
     def navegate (self):
         self.driver.get(self.url)
+
 
     #function to get list of all issue links
     def get_all_issues(self):
@@ -46,10 +48,12 @@ class Aceno:
             link_list.append(element_link_issue)
         return link_list # return a list of all issue links
     
+
     # function to click in the issue
     def click_issue(self):
         element_date_issue_click = self.driver.find_element(By.CLASS_NAME, self.date_issue)
         element_date_issue_click.click()       
+
 
     #function to get all article links and return a list
     def get_all_articles(self):
@@ -86,15 +90,19 @@ class Aceno:
             element_abstract_text = "  Abstract is not available"
         text_information = [element_number_issue, element_author_text, element_doi_text, element_abstract_text]
         return text_information
-        
+
+
+
     #function to save all article's information and return a csv file
     def save_text_information(self):
         text_information = self.get_text_information()
         list_text_information = text_information.copy()
         list_text_information.append(text_information)
-        if not os.path.exists("aceno/texts"):
-            os.makedirs("texts")
-        with open("aceno_texts.csv", "a", newline='') as file:
+        dir = "aceno/texts"
+        file_name = "aceno_texts.csv"
+        if not os.path.exists(dir):
+            os.makedirs(dir)
+        with open(os.path.join(dir, file_name), "a", newline='') as file:
             writer = csv.writer(file) 
             writer.writerow(list_text_information)
             writer.writerow(" ")
@@ -115,18 +123,22 @@ class Aceno:
         print("It's done!")
         self.driver.close()
 
+
+
     #function to report the moment of the search
     def to_report(self):
         now = datetime.now()
         current_time = now.strftime("%D:%H%M:%S")
-        if not os.path.exists("aceno/reports"):
-            os.makedirs("reports")
-        with open("aceno_reports.txt", "w", newline='') as file:
+        dir = "aceno/reports"
+        file_name = "aceno_report.txt"
+        if not os.path.exists(dir):
+            os.makedirs(dir)
+        with open(os.path.join(dir,file_name), "w", newline='') as file:
             file.write (f"This search was made in {current_time}")
             file.close()
         
 ff = webdriver.Firefox()
 a = Aceno(ff) 
-#a.to_iterate()
+a.to_iterate()
 #ff.quit()
-a.to_report() 
+#a.to_report() 
