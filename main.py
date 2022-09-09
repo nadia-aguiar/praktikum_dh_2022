@@ -10,14 +10,16 @@ class Aceno:
         self.driver = driver
     
         self.url = "https://periodicoscientificos.ufmt.br/ojs/index.php/aceno/issue/archive"
-        self.all_journals = ".page" #CSS Selector 
+        self.all_journals = ".issues_archive" #CSS Selector 
         self.journal = "obj_issue_summary" #class
         self.date_journal = "title" # class
+        self.issue_link = "href" # attribute
 
         self.page_articles = "page.page_issue" #class
         self.box_articles = "sections" #class
-        self.list_articles = "/html/body/div/div[1]/div[1]/div"# div.section:nth-child(2)" #CSS SELECTOR  
+        self.list_articles = "obj_article_summary"# class  
         self.article_title_id = "[id^='article-']" #CSS Selector
+        self.article_link = "href" #attribute
 
         self.box_info_text = "obj_article_details" #class
         self.number_journal = "a.title" #CSS Selector
@@ -27,23 +29,41 @@ class Aceno:
         self.return_page_article = "/html/body/div[1]/div[1]/div[1]/div/article/div/div[2]/div[4]/section[1]/div/a" #XPATH
 
 
-
     def navegate (self):
         self.driver.get(self.url)
 
-    def open_journal(self):
-        element_all_journals =  self.driver.find_element(By.CSS_SELECTOR, self.all_journals)
-        element_journal = element_all_journals.find_element(By.CLASS_NAME, self.journal)
-        element_date_journal_click = element_journal.find_element(By.CLASS_NAME, self.date_journal)
-        element_date_journal_click.click()
-        
+    #function to get list of all issue links
+    def get_all_issues(self):
+        element_issues_box = self.driver.find_element(By.CSS_SELECTOR, self.all_journals)
+        element_all_issues = element_issues_box.find_elements(By.CLASS_NAME, self.journal)
+        link_list = []
+        for element_issue in element_all_issues:
+            element_issue_title = element_issue.find_element(By.CLASS_NAME, self.date_journal)
+            element_link_issue = element_issue_title.get_attribute(self.issue_link)
+            link_list.append(element_link_issue)
+        return link_list # return a list of all issue links
+    
+    # function to click in the issue
+    def click_issue(self):
+        element_date_issue_click = self.driver.find_element(By.CLASS_NAME, self.date_journal)
+        element_date_issue_click.click()       
 
-    def open_text(self):
+    #function to get all article links and return a list
+    def get_all_articles(self):
         element_page_articles = self.driver.find_element(By.CLASS_NAME, self.page_articles)
         element_box_articles = element_page_articles.find_element(By.CLASS_NAME, self.box_articles)            
-        elements_list_articles = element_box_articles.find_element(By.XPATH, self.list_articles)
-        element_article_title_id = elements_list_articles.find_element(By.CSS_SELECTOR, self.article_title_id)
-        element_article_title_id.click()  
+        elements_list_articles = element_box_articles.find_elements(By.CLASS_NAME, self.list_articles)
+        link_list = []
+        for element_list_article in elements_list_articles:
+            element_id_article = element_list_article.find_element(By.CSS_SELECTOR, self.article_title_id)
+            element_link_article = element_id_article.get_attribute(self.article_link)
+            link_list.append(element_link_article)
+        return link_list
+
+    #def open_text(self):
+    #    element_article_title_id = self.driver.find_element(By.CSS_SELECTOR, self.article_title_id)
+    #    element_article_link = element_article_title_id.get_attribute(article_link)
+    #    element_article_title_id.click()
 
     def get_text_information(self):
         element_box_info_text = self.driver.find_element(By.CLASS_NAME, self.box_info_text)
@@ -77,33 +97,21 @@ class Aceno:
             writer.writerow("")
 
     def to_iterate(self):
-        count= 0
+        #count= 0
         numerador = 0
         self.navegate()
-        for idx in range(len(self.journal)):
-            self.open_journal()
-            self.open_text()
-            for idx in range(len(self.article_title_id)):
-                self.get_text_information()
+        element_all_issues = self.get_all_issues()
+        for idx in range(len(element_all_issues)):
+            self.driver.get(element_all_issues[idx])
+            self.click_issue()
+            link_articles = self.get_all_articles()
+            for idx in range(len(link_articles)):
+                self.driver.get(link_articles[idx])
                 self.save_text_information()
-                element_return_page_article = self.driver.find_element(By.XPATH, self.return_page_article)
-                element_return_page_article.click()
-                self.open_text()
-                count+=1
-                self.open_journal()
         numerador+=1
         print("It's done!")
 
-
-        
 ff = webdriver.Firefox()
 a = Aceno(ff) 
-#a.navegate()  
-#a.open_journal() 
-#a.open_text() 
-#a.get_text_information()
-#a.save_text_information()
 a.to_iterate()
 ff.quit() 
-
-
