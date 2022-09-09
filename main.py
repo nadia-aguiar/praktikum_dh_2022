@@ -128,7 +128,7 @@ class Aceno:
     """function to report the moment of the search"""
     def to_report(self):
         now = datetime.now()
-        current_time = now.strftime("%D:%H%M:%S")
+        current_time = now.strftime("%D:%H:%M:%S")
         dir = "aceno/reports"
         file_name = "aceno_report.txt"
         if not os.path.exists(dir):
