@@ -93,14 +93,15 @@ class Aceno:
         text_information = self.get_text_information()
         list_text_information = text_information.copy()
         list_text_information.append(text_information)
-        #print(list_text_information)
         if not os.path.exists("Aceno"):
             os.makedirs("Aceno")
-        with open("aceno_texts.csv", "w", newline='') as file:
-            writer = csv.writer(file)            
+        with open("aceno_texts.csv", "a", newline='') as file:
+            writer = csv.writer(file) 
             writer.writerow(list_text_information)
-            writer.writerow("")
-        #print(writer)
+            writer.writerow(" ")
+            file.close()
+        
+
 
     def to_iterate(self):
         self.navegate()
