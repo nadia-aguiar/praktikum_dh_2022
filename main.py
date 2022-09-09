@@ -121,7 +121,7 @@ class Aceno:
                 self.driver.get(link_articles[idx])
                 self.save_text_information()
         print("It's done!")
-        self.driver.close()
+        
 
 
 
@@ -140,5 +140,6 @@ class Aceno:
 ff = webdriver.Firefox()
 a = Aceno(ff) 
 a.to_iterate()
-#ff.quit()
-#a.to_report() 
+a.to_report() 
+ff.quit()
+
