@@ -7,7 +7,7 @@ from datetime import datetime
 
 
 class Aceno:
-    #function with the variables
+    """function with the variables"""
     def __init__(self, driver):
         self.driver = driver
     
@@ -32,12 +32,12 @@ class Aceno:
         self.return_page_article = "/html/body/div[1]/div[1]/div[1]/div/article/div/div[2]/div[4]/section[1]/div/a" #XPATH
 
 
-    #function to open the link of the journal Aceno
+    """function to open the link of the journal Aceno"""
     def navegate (self):
         self.driver.get(self.url)
 
 
-    #function to get list of all issue links
+    """function to get list of all issue links"""
     def get_all_issues(self):
         element_issues_box = self.driver.find_element(By.CSS_SELECTOR, self.all_issues)
         element_all_issues = element_issues_box.find_elements(By.CLASS_NAME, self.issue)
@@ -49,13 +49,13 @@ class Aceno:
         return link_list # return a list of all issue links
     
 
-    # function to click in the issue
+    """function to click in the issue"""
     def click_issue(self):
         element_date_issue_click = self.driver.find_element(By.CLASS_NAME, self.date_issue)
         element_date_issue_click.click()       
 
 
-    #function to get all article links and return a list
+    """function to get all article links and return a list"""
     def get_all_articles(self):
         element_page_articles = self.driver.find_element(By.CLASS_NAME, self.page_articles)
         element_box_articles = element_page_articles.find_element(By.CLASS_NAME, self.box_articles)            
@@ -68,32 +68,32 @@ class Aceno:
         return link_list
 
 
-    #function to get all information about the article and return a list
+    """function to get all information about the article and return a list"""
     def get_text_information(self): 
         text_information = []
         element_box_info_text = self.driver.find_element(By.CLASS_NAME, self.box_info_text)
         try:
             element_number_issue = element_box_info_text.find_element(By.CSS_SELECTOR, self.number_issue).text 
         except NoSuchElementException:
-            element_number_issue = " Number of issue not available"  
+            element_number_issue = " Number of issue not available."  
         try:
             element_author_text = element_box_info_text.find_element(By.CLASS_NAME, self.author_text).text
         except NoSuchElementException:
-            element_author_text = " Author name is not available"
+            element_author_text = " Author name is not available."
         try:
             element_doi_text = element_box_info_text.find_element(By.CLASS_NAME, self.doi_text).text
         except NoSuchElementException:
-            element_doi_text = "  DOI of the text is not available"
+            element_doi_text = "  DOI of the text is not available."
         try:
             element_abstract_text = element_box_info_text.find_element(By.CSS_SELECTOR, self.abstract_text).text
         except NoSuchElementException:
-            element_abstract_text = "  Abstract is not available"
+            element_abstract_text = "  Abstract is not available."
         text_information = [element_number_issue, element_author_text, element_doi_text, element_abstract_text]
         return text_information
 
 
 
-    #function to save all article's information and return a csv file
+    """function to save all article's information and return a csv file"""
     def save_text_information(self):
         text_information = self.get_text_information()
         list_text_information = text_information.copy()
@@ -109,7 +109,7 @@ class Aceno:
             file.close()
         
 
-    #function to iterate overall issues and articles
+    """function to iterate overall issues and articles"""
     def to_iterate(self):
         self.navegate()
         element_all_issues = self.get_all_issues()
@@ -125,7 +125,7 @@ class Aceno:
 
 
 
-    #function to report the moment of the search
+    """function to report the moment of the search"""
     def to_report(self):
         now = datetime.now()
         current_time = now.strftime("%D:%H%M:%S")
