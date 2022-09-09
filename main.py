@@ -25,7 +25,8 @@ class Aceno:
         self.number_journal = "a.title" #CSS Selector
         self.author_text = "authors" #class
         self.doi_text = "item.doi" #class
-        self.abstract_text = "item.abstract" #class
+        self.abstract_text = "html body.pkp_page_article.pkp_op_view div.pkp_structure_page div.pkp_structure_content.has_sidebar div.pkp_structure_main div.page.page_article article.obj_article_details div.row div.main_entry section.item.abstract p"
+        #CSS Selector
         self.return_page_article = "/html/body/div[1]/div[1]/div[1]/div/article/div/div[2]/div[4]/section[1]/div/a" #XPATH
 
 
@@ -65,40 +66,43 @@ class Aceno:
     #    element_article_link = element_article_title_id.get_attribute(article_link)
     #    element_article_title_id.click()
 
-    def get_text_information(self):
+    def get_text_information(self): 
+        text_information = []
         element_box_info_text = self.driver.find_element(By.CLASS_NAME, self.box_info_text)
         try:
             element_number_journal = element_box_info_text.find_element(By.CSS_SELECTOR, self.number_journal).text 
         except NoSuchElementException:
-            element_number_journal = "None"  
+            element_number_journal = " Number of Journal not available"  
         try:
             element_author_text = element_box_info_text.find_element(By.CLASS_NAME, self.author_text).text
         except NoSuchElementException:
-            element_author_text = "None"
+            element_author_text = " Author name is not available"
         try:
             element_doi_text = element_box_info_text.find_element(By.CLASS_NAME, self.doi_text).text
         except NoSuchElementException:
-            element_doi_text = "None"
+            element_doi_text = "  DOI of the text is not available"
         try:
-            element_abstract_text = element_box_info_text.find_element(By.CLASS_NAME, self.abstract_text).text
+            element_abstract_text = element_box_info_text.find_element(By.CSS_SELECTOR, self.abstract_text).text
         except NoSuchElementException:
-            element_abstract_text = "None"
-        list_text_information = [element_number_journal, element_author_text, element_doi_text, element_abstract_text]
-        return list_text_information
+            element_abstract_text = "  Abstract is not available"
+        text_information = [element_number_journal, element_author_text, element_doi_text, element_abstract_text]
+        return text_information
         
 
     def save_text_information(self):
         text_information = self.get_text_information()
+        list_text_information = text_information.copy()
+        list_text_information.append(text_information)
+        #print(list_text_information)
         if not os.path.exists("Aceno"):
             os.makedirs("Aceno")
         with open("aceno_texts.csv", "w", newline='') as file:
             writer = csv.writer(file)            
-            writer.writerow(text_information)
+            writer.writerow(list_text_information)
             writer.writerow("")
+        #print(writer)
 
     def to_iterate(self):
-        #count= 0
-        numerador = 0
         self.navegate()
         element_all_issues = self.get_all_issues()
         for idx in range(len(element_all_issues)):
@@ -108,7 +112,7 @@ class Aceno:
             for idx in range(len(link_articles)):
                 self.driver.get(link_articles[idx])
                 self.save_text_information()
-        numerador+=1
+
         print("It's done!")
 
 ff = webdriver.Firefox()
