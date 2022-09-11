@@ -18,13 +18,13 @@ class Aceno:
         self.driver = driver
     
         self.url = "https://periodicoscientificos.ufmt.br/ojs/index.php/aceno/issue/archive"
-        self.all_issues = ".issues_archive" #CSS Selector 
+        #self.all_issues = ".issues_archive" #CSS Selector 
         self.issue = "obj_issue_summary" #class
         self.date_issue = "title" # class
         self.issue_link = "href" # attribute
 
-        self.page_articles = "page.page_issue" #class
-        self.box_articles = "sections" #class
+        #self.page_articles = "page.page_issue" #class
+        #self.box_articles = "sections" #class
         self.list_articles = "obj_article_summary"# class  
         self.article_title_id = "[id^='article-']" #CSS Selector
         self.article_link = "href" #attribute
@@ -44,8 +44,8 @@ class Aceno:
 
     """function to get list of all issue links and return a list"""
     def get_all_issues(self):
-        element_issues_box = self.driver.find_element(By.CSS_SELECTOR, self.all_issues)
-        element_all_issues = element_issues_box.find_elements(By.CLASS_NAME, self.issue)
+        #element_issues_box = self.driver.find_element(By.CSS_SELECTOR, self.all_issues)
+        element_all_issues = self.driver.find_elements(By.CLASS_NAME, self.issue)
         link_list = []
         for element_issue in element_all_issues:
             element_issue_title = element_issue.find_element(By.CLASS_NAME, self.date_issue)
@@ -62,9 +62,9 @@ class Aceno:
 
     """function to get all article links and return a list"""
     def get_all_articles(self):
-        element_page_articles = self.driver.find_element(By.CLASS_NAME, self.page_articles)
-        element_box_articles = element_page_articles.find_element(By.CLASS_NAME, self.box_articles)            
-        elements_list_articles = element_box_articles.find_elements(By.CLASS_NAME, self.list_articles)
+        #element_page_articles = self.driver.find_element(By.CLASS_NAME, self.page_articles)
+        #element_box_articles = element_page_articles.find_element(By.CLASS_NAME, self.box_articles)            
+        elements_list_articles = self.driver.find_elements(By.CLASS_NAME, self.list_articles)
         link_list = []
         for element_list_article in elements_list_articles:
             element_id_article = element_list_article.find_element(By.CSS_SELECTOR, self.article_title_id)
