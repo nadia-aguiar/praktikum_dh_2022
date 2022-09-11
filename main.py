@@ -1,6 +1,4 @@
-"""This code scraps the information about articles published in Revista aceno,
-saves this information and returns a csv file
-"""
+"""This code scraps the information about articles published in Revista aceno,saves this information and returns a csv file"""
 
 import csv
 import os
@@ -10,9 +8,9 @@ from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 
-__author__ = ["Nádia dos Santos Ossenkop, Eric Brasil"]
-__copyleft__ = "Freedom 4"
-__email__ = ["nadia.aguiar@hotmail.com, ericbrasiln@protonmail.com"]
+__authors__ = ["Nádia dos Santos Ossenkop, Eric Brasil"]
+___copyleft___ = "Freedom 4"
+__emails__ = ["nadia.aguiar@hotmail.com, ericbrasiln@protonmail.com"]
 
 class Aceno:
     """function with the variables"""
@@ -20,10 +18,13 @@ class Aceno:
         self.driver = driver
     
         self.url = "https://periodicoscientificos.ufmt.br/ojs/index.php/aceno/issue/archive"
+        self.all_issues = ".issues_archive" #CSS Selector 
         self.issue = "obj_issue_summary" #class
         self.date_issue = "title" # class
         self.issue_link = "href" # attribute
 
+        self.page_articles = "page.page_issue" #class
+        self.box_articles = "sections" #class
         self.list_articles = "obj_article_summary"# class  
         self.article_title_id = "[id^='article-']" #CSS Selector
         self.article_link = "href" #attribute
@@ -32,10 +33,7 @@ class Aceno:
         self.number_issue = "a.title" #CSS Selector
         self.author_text = "authors" #class
         self.doi_text = "item.doi" #class
-        self.abstract_text = "html body.pkp_page_article.pkp_op_view div.pkp_structure_page div.pkp_structure_content.has_sidebar"\
-                             "div.pkp_structure_main div.page.page_article article.obj_article_details div.row div.main_entry"\
-                             " section.item.abstract p" #CSS Selector
-        
+        self.abstract_text = "html body.pkp_page_article.pkp_op_view div.pkp_structure_page div.pkp_structure_content.has_sidebar div.pkp_structure_main div.page.page_article article.obj_article_details div.row div.main_entry section.item.abstract p" #CSS Selector
         self.return_page_article = "/html/body/div[1]/div[1]/div[1]/div/article/div/div[2]/div[4]/section[1]/div/a" #XPATH
 
 
@@ -46,7 +44,8 @@ class Aceno:
 
     """function to get list of all issue links and return a list"""
     def get_all_issues(self):
-        element_all_issues = self.driver.find_elements(By.CLASS_NAME, self.issue)
+        element_issues_box = self.driver.find_element(By.CSS_SELECTOR, self.all_issues)
+        element_all_issues = element_issues_box.find_elements(By.CLASS_NAME, self.issue)
         link_list = []
         for element_issue in element_all_issues:
             element_issue_title = element_issue.find_element(By.CLASS_NAME, self.date_issue)
@@ -63,7 +62,9 @@ class Aceno:
 
     """function to get all article links and return a list"""
     def get_all_articles(self):
-        elements_list_articles = self.driver.find_elements(By.CLASS_NAME, self.list_articles)
+        element_page_articles = self.driver.find_element(By.CLASS_NAME, self.page_articles)
+        element_box_articles = element_page_articles.find_element(By.CLASS_NAME, self.box_articles)            
+        elements_list_articles = element_box_articles.find_elements(By.CLASS_NAME, self.list_articles)
         link_list = []
         for element_list_article in elements_list_articles:
             element_id_article = element_list_article.find_element(By.CSS_SELECTOR, self.article_title_id)
@@ -108,7 +109,6 @@ class Aceno:
             writer.writerow(text_information)
             writer.writerow(" ")
             file.close()
-        
 
     """function to iterate overall issues and articles"""
     def to_iterate(self):
@@ -121,11 +121,10 @@ class Aceno:
             for idx in range(len(link_articles)):
                 self.driver.get(link_articles[idx])
                 self.save_text_information()
-        print("It's done!")        
+        print("It's done!")
+        
 
-
-
-    """function to report the moment of the search and return a txt file"""
+    """function to report the moment of the search and return a txt"""
     def to_report(self):
         now = datetime.now()
         current_time = now.strftime("%D %H:%M:%S")
@@ -136,7 +135,6 @@ class Aceno:
         with open(os.path.join(dir,file_name), "a", newline='') as file:
             file.write (f"This search was made in {current_time}\n")
             file.close()
-
         
 ff = webdriver.Firefox()
 a = Aceno(ff) 
