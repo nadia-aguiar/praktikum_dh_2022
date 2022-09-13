@@ -35,7 +35,7 @@ class Aceno:
         self.doi_text = "item.doi" #class
         self.abstract_text = "html body.pkp_page_article.pkp_op_view div.pkp_structure_page div.pkp_structure_content.has_sidebar div.pkp_structure_main div.page.page_article article.obj_article_details div.row div.main_entry section.item.abstract p" #CSS Selector
         self.return_page_article = "/html/body/div[1]/div[1]/div[1]/div/article/div/div[2]/div[4]/section[1]/div/a" #XPATH
-
+        
 
     """function to open the link of the journal Aceno"""
     def navegate (self):
@@ -109,6 +109,7 @@ class Aceno:
             writer.writerow(text_information)
             writer.writerow(" ")
             file.close()
+
 
     """function to iterate overall issues and articles"""
     def to_iterate(self):
