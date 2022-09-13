@@ -97,9 +97,6 @@ class Aceno:
         text_information = [element_number_issue, element_author_text, element_doi_text, element_abstract_title, element_abstract_text]
         return text_information
 
-        
-
-
 
     """function to save all article's information and return a csv file"""
     def save_text_information(self):
@@ -115,7 +112,6 @@ class Aceno:
             file.close()
 
 
-
     """function to go to the next page, if one exists"""
     def click_next_page (self):       
         try:
@@ -126,7 +122,6 @@ class Aceno:
             self.to_iterate()
         except NoSuchElementException:
             print("That's all folks!")
-
 
 
     """function to iterate overall issues and articles"""
