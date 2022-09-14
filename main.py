@@ -8,7 +8,7 @@ from datetime import datetime
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
-#from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.firefox.options import Options
 
 __authors__ = ["Nádia dos Santos Ossenkop, Eric Brasil"]
 ___copyleft___ = "Freedom 4"
@@ -44,7 +44,11 @@ class Aceno:
 
     """function to open the link of the journal Aceno"""
     def navegate (self):
+        options = Options()
+        options.headless = True
+        self.driver = webdriver.Firefox(options=options)
         self.driver.get(self.url)
+        print ("The party, ops Browser was started" )
 
 
     """function to get list of all issue links and return a list"""
@@ -197,7 +201,7 @@ class Aceno:
             file.close()
     
         
-ff = webdriver.Firefox()
+ff = webdriver.FirefoxOptions()
 a = Aceno(ff)
 a.pdf_or_no()
 a.to_report() 
