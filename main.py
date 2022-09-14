@@ -143,7 +143,7 @@ class Aceno:
         except NoSuchElementException:
             print("That's all folks!")
      
-     
+
     """function to iterate overall issues and articles"""
     def to_iterate(self):
         self.navegate()
@@ -198,9 +198,8 @@ class Aceno:
     
         
 ff = webdriver.Firefox()
-a = Aceno(ff) 
-#a.to_iterate()
-#a.to_report() 
-#ff.quit()
+a = Aceno(ff)
 a.pdf_or_no()
+a.to_report() 
+ff.quit()
 
