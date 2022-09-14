@@ -2,9 +2,9 @@
 
 import csv
 import os
-import wget
 from datetime import datetime
 
+import wget
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
@@ -126,7 +126,6 @@ class Aceno:
         element_box_info_text = self.driver.find_element(By.CLASS_NAME, self.box_info_text)
         element_pdf_link_article = element_box_info_text.find_element(By.CSS_SELECTOR, self.pdf_article)
         element_pdf_url = element_pdf_link_article.get_attribute("href")
-        print(element_pdf_url)
         dir = "aceno/pdf"
         if not os.path.exists(dir):
             os.makedirs(dir)
@@ -178,7 +177,7 @@ class Aceno:
         self.click_next_page()
 
 
-    """function to ask user to save PDF's or not"""
+    """function to ask to user to save PDF's or not"""
     def pdf_or_no(self):
         pdf_or_no =" "
         while pdf_or_no != "pdf" or pdf_or_no != "no":
@@ -188,7 +187,7 @@ class Aceno:
             else:
                 self.to_iterate_pdf()
 
-    """function to report the moment of the search and return a txt"""
+    """function to report the moment of the search and return a txt file"""
     def to_report(self):
         now = datetime.now()
         current_time = now.strftime("%D %H:%M:%S")
