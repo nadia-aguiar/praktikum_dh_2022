@@ -2,11 +2,13 @@
 
 import csv
 import os
+import wget
 from datetime import datetime
 
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
+#from selenium.webdriver.firefox.options import Options
 
 __authors__ = ["Nádia dos Santos Ossenkop, Eric Brasil"]
 ___copyleft___ = "Freedom 4"
@@ -36,6 +38,9 @@ class Aceno:
         self.return_page_article = "/html/body/div[1]/div[1]/div[1]/div/article/div/div[2]/div[4]/section[1]/div/a" #XPATH
         self.box_next_page = "/html/body/div/div[1]/div[1]/div/div" #XPATH
         self.next_page = "next" #class
+
+        self.pdf_article = ".obj_galley_link" #css
+        self.pdf_url ="href" #attribute
 
     """function to open the link of the journal Aceno"""
     def navegate (self):
@@ -112,18 +117,33 @@ class Aceno:
             file.close()
 
 
+    """function to save all informations and return a PDF file"""
+    def save_files_pdf(self):
+        element_box_info_text = self.driver.find_element(By.CLASS_NAME, self.box_info_text)
+        element_pdf_link_article = element_box_info_text.find_element(By.CSS_SELECTOR, self.pdf_article)
+        element_pdf_url = element_pdf_link_article.get_attribute("href")
+        print(element_pdf_url)
+        dir = "aceno/pdf"
+        if not os.path.exists(dir):
+            os.makedirs(dir)
+        try:            
+            wget.download(element_pdf_url, os.path.join(dir, wget.filename_from_url(element_pdf_url)))
+        except NoSuchElementException:
+            pass
+
+
     """function to go to the next page, if one exists"""
     def click_next_page (self):       
         try:
             element_box_next_page = self.driver.find_element(By.XPATH, self.box_next_page) 
             element_next_page = element_box_next_page.find_element(By.CLASS_NAME, self.next_page)
             element_next_page.click()
-            self.url = self.driver.current_url #2
+            self.url = self.driver.current_url
             self.to_iterate()
         except NoSuchElementException:
             print("That's all folks!")
-
-
+     
+     
     """function to iterate overall issues and articles"""
     def to_iterate(self):
         self.navegate()
@@ -137,7 +157,32 @@ class Aceno:
                 self.save_text_information()
         self.driver.get(self.url)
         self.click_next_page()
-        
+
+
+    """function to iterate overall issues and articles and return a PDF file"""
+    def to_iterate_pdf(self):
+        self.navegate()
+        element_all_issues = self.get_all_issues()
+        for idx in range(len(element_all_issues)):
+            self.driver.get(element_all_issues[idx])
+            self.click_issue()
+            link_articles = self.get_all_articles()
+            for idx in range(len(link_articles)):
+                self.driver.get(link_articles[idx])
+                self.save_files_pdf()
+        self.driver.get(self.url)
+        self.click_next_page()
+
+
+    """function to ask user to save PDF's or not"""
+    def pdf_or_no(self):
+        pdf_or_no =" "
+        while pdf_or_no != "pdf" or pdf_or_no != "no":
+            pdf_or_no = input("Do you want to download the PDF files or not? (pdf or no): ").lower()
+            if pdf_or_no == "no":
+                self.to_iterate()
+            else:
+                self.to_iterate_pdf()
 
     """function to report the moment of the search and return a txt"""
     def to_report(self):
@@ -154,7 +199,8 @@ class Aceno:
         
 ff = webdriver.Firefox()
 a = Aceno(ff) 
-a.to_iterate()
-a.to_report() 
-ff.quit()
+#a.to_iterate()
+#a.to_report() 
+#ff.quit()
+a.pdf_or_no()
 
