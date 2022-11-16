@@ -85,23 +85,23 @@ class Aceno:
         try:
             element_number_issue = element_box_info_text.find_element(By.CSS_SELECTOR, self.number_issue).text 
         except NoSuchElementException:
-            element_number_issue = " Number of issue not available."  
+            element_number_issue = " Number of issue not available"  
         try:
             element_author_text = element_box_info_text.find_element(By.CLASS_NAME, self.author_text).text
         except NoSuchElementException:
-            element_author_text = " Author name is not available."
+            element_author_text = " Author name is not available"
         try:
             element_doi_text = element_box_info_text.find_element(By.CLASS_NAME, self.doi_text).text
         except NoSuchElementException:
-            element_doi_text = "  DOI of the text is not available."
+            element_doi_text = "  DOI of the text is not available"
         try:
             element_abstract_text = element_box_info_text.find_element(By.CSS_SELECTOR, self.abstract_text).text
         except NoSuchElementException:
-            element_abstract_text = "  Abstract is not available."
+            element_abstract_text = "  Abstract is not available"
         try:
             element_abstract_title = element_box_info_text.find_element (By.CLASS_NAME, self.abstract_title).text
         except NoSuchElementException:
-            element_abstract_title = "Title is not available."
+            element_abstract_title = "Title is not available"
         
         text_information = [element_number_issue, element_author_text, element_doi_text, element_abstract_title, element_abstract_text]
         return text_information
@@ -186,6 +186,7 @@ class Aceno:
                 self.to_iterate()
             else:
                 self.to_iterate_pdf()
+            break
 
     """function to report the moment of the search and return a txt file"""
     def to_report(self):
@@ -200,9 +201,9 @@ class Aceno:
             file.close()
     
         
-ff = webdriver.FirefoxOptions()
-a = Aceno(ff)
-a.pdf_or_no()
-a.to_report() 
-ff.quit()
+firefox = webdriver.FirefoxOptions()
+aceno = Aceno(firefox)
+aceno.pdf_or_no()
+aceno.to_report() 
+firefox.quit()
 
