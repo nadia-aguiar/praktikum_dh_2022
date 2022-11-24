@@ -52,5 +52,5 @@ $ cd <Pfad zum Ordner>
 Installieren Sie die erforderlichen Komponenten mit dem folgenden Befehl:
 
 ~~~
-pip3 install -r anforderungen.txt
+pip3 install -r requirements.txt
 ~~~
