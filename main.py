@@ -5,6 +5,7 @@ import os
 from datetime import datetime
 
 import wget
+from urllib.error import HTTPError
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
@@ -41,6 +42,8 @@ class Aceno:
 
         self.pdf_article = ".obj_galley_link" #css
         self.pdf_url ="href" #attribute
+
+        self.id_number = 0 #id number to save pdf
 
     """function to open the link of the journal Aceno"""
     def navegate (self):
@@ -123,17 +126,23 @@ class Aceno:
 
     """function to save all informations and return a PDF file"""
     def save_files_pdf(self):
+        self.id_number += 1
+        hash_number = "_" + str(self.id_number)
         element_box_info_text = self.driver.find_element(By.CLASS_NAME, self.box_info_text)
-        element_pdf_link_article = element_box_info_text.find_element(By.CSS_SELECTOR, self.pdf_article)
-        element_pdf_url = element_pdf_link_article.get_attribute("href")
-        dir = "aceno/pdf"
-        if not os.path.exists(dir):
-            os.makedirs(dir)
-        try:            
-            wget.download(element_pdf_url, os.path.join(dir, wget.filename_from_url(element_pdf_url)))
+        try:
+            element_pdf_link_article = element_box_info_text.find_element(By.CSS_SELECTOR, self.pdf_article)
+            element_pdf_url = element_pdf_link_article.get_attribute("href")
+            dir = "aceno/pdf"
+            if not os.path.exists(dir):
+                os.makedirs(dir)
+            try:            
+                wget.download(element_pdf_url, os.path.join(dir, wget.filename_from_url(element_pdf_url)+str(hash_number)+".pdf"))
+            except HTTPError or NoSuchElementException:
+                print("\nError to download the PDF file")
+                pass
         except NoSuchElementException:
+            print("\nPDF not available")
             pass
-
 
     """function to go to the next page, if one exists"""
     def click_next_page (self):       
@@ -144,7 +153,7 @@ class Aceno:
             self.url = self.driver.current_url
             self.to_iterate()
         except NoSuchElementException:
-            print("That's all folks!")
+            print("\nThat's all folks!")
      
 
     """function to iterate overall issues and articles"""
@@ -204,6 +213,5 @@ class Aceno:
 firefox = webdriver.FirefoxOptions()
 aceno = Aceno(firefox)
 aceno.pdf_or_no()
-aceno.to_report() 
-firefox.quit()
-
+aceno.to_report()
+aceno.driver.quit()

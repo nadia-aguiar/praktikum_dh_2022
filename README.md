@@ -2,16 +2,16 @@ Esse repositório faz parte do estágio obrigatório, módulo 8 - 3° Semestre -
 
 O estágio faz parte do programa de cooperação entre a Universidade Nova de Lisboa e a Universidade Federal da Bahia. O professor que tutela o estágio é o Eric Brasil. 
 
-O objetivo do estágio é raspar dados da Revista Aceno - Revista de Antropologia do Centro-Oeste - usando linguagem Python e alimentar o repositório do [Laboratório de Humanidades Digitais da Universidade Federal da bahia](https://github.com/LABHDUFBA) deixando os dados abertos para que outr_s pesquisador_s e instituições possam utilizar os dados. Ao final do estágio será realizado um workshop contando sobre o processo, bem como a publicação de um artigo em português no site *Programing Historian* e um relatório em alemão, para a disciplina na universidade.
+O objetivo do estágio é raspar dados da Revista Aceno - Revista de Antropologia do Centro-Oeste - usando linguagem Python e alimentar o repositório do [Laboratório de Humanidades Digitais da Universidade Federal da Bahia](https://github.com/LABHDUFBA) deixando os dados abertos para que outr_s pesquisador_s e instituições possam utilizar os dados. Ao final do estágio será realizado um workshop contando sobre o processo, bem como a publicação de um artigo em português no site *Programing Historian* e um relatório em alemão, para a disciplina na universidade.
 
-### Instalação 
-#### Pré-requisitos:
+## Instalação 
+### Pré-requisitos:
 
 Para executar o programa é necessário fazer o download ou clonar o [código](https://github.com/nadia-aguiar/praktikum_dh_2022) no seu computador. Antes de executar o código é necessário instalar algumas dependências.
 
 O código aqui apresentado foi desenvolvido usando a versão 3.7.6 do Python e por isso o Python3 deve ser ou estar instalado em sua máquina. Caso não esteja instalado, é possível encontrar aqui um guia de instalação para [Windows](https://python.org.br/instalacao-linux/) e [aqui](https://python.org.br/instalacao-linux/) para Linux e [aqui](https://python.org.br/instalacao-mac/) para Mac.
 
-Além de ter isntalado Python3 no seu computador, o código precisa de outras dependências e bibliotecas. Para fazer a instalação das mesmas, digite o seguinte comando no Terminal, que deve estar aberto dentro da pasta onde o código foi salvo. Para entender melhor como ocorre a instalação de módulos Python com pip [clique aqui](https://programminghistorian.org/pt/licoes/instalacao-modulos-python-pip)
+Além de ter instalado Python3 no seu computador, o código precisa de outras dependências e bibliotecas. Para fazer a instalação das mesmas, digite o seguinte comando no Terminal, que deve estar aberto dentro da pasta onde o código foi salvo. Para entender melhor como ocorre a instalação de módulos Python com pip [clique aqui](https://programminghistorian.org/pt/licoes/instalacao-modulos-python-pip)
 
 Dentro da pasta onde o arquivo requirements.txt foi salvo, digite:
 
@@ -25,7 +25,11 @@ Instale as dependências necessárias com o seguinte comando:
 pip3 install -r requirements.txt
 ~~~
 
-_________________________________________________________________________________________
+#### Webdriver e Navegador
+
+Para que o código funcione é preciso ter o navegador Mozilla Firefox instalado assim como o WebDriver para o mesmo. Para saber mais, clique [aqui](https://labhdufba.github.io/ferramentas_scielo_v2/#webdriver-e-navegador).
+
+---
 
 Dieses Repository ist Teil des Pflichtpraktikums, Modul 8 - 3. Semester -, des Masterstudiengangs Digitale Methoden in den Geistes- und Kulturwissenschaften der Mainz Universität .
 
