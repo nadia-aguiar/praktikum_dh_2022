@@ -5,6 +5,7 @@ import os
 from datetime import datetime
 
 import wget
+import requests
 from urllib.error import HTTPError
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
@@ -20,7 +21,7 @@ class Aceno:
     def __init__(self, driver):
         self.driver = driver
     
-        self.url = "https://periodicoscientificos.ufmt.br/ojs/index.php/aceno/issue/archive"
+        self.url = "https://periodicoscientificos.ufmt.br/ojs/index.php/aceno/issue/archive" #url of the journal
         self.issue = "obj_issue_summary" #class
         self.date_issue = "title" # class
         self.issue_link = "href" # attribute
@@ -40,10 +41,12 @@ class Aceno:
         self.box_next_page = "/html/body/div/div[1]/div[1]/div/div" #XPATH
         self.next_page = "next" #class
 
-        self.pdf_article = ".obj_galley_link" #css
+        self.pdf_article = ".obj_galley_link" #css 
         self.pdf_url ="href" #attribute
 
         self.id_number = 0 #id number to save pdf
+        self.botton_download = ".download" #css
+        self.botton_return = ".return" #css
 
     """function to open the link of the journal Aceno"""
     def navegate (self):
@@ -52,6 +55,7 @@ class Aceno:
         self.driver = webdriver.Firefox(options=options)
         self.driver.get(self.url)
         print ("The party, ops Browser was started" )
+
 
 
     """function to get list of all issue links and return a list"""
@@ -131,15 +135,23 @@ class Aceno:
         element_box_info_text = self.driver.find_element(By.CLASS_NAME, self.box_info_text)
         try:
             element_pdf_link_article = element_box_info_text.find_element(By.CSS_SELECTOR, self.pdf_article)
-            element_pdf_url = element_pdf_link_article.get_attribute("href")
-            dir = "aceno/pdf"
+            element_pdf_url = element_pdf_link_article.get_attribute("href")            
+            dir = "caribe/pdf"
             if not os.path.exists(dir):
                 os.makedirs(dir)
             try:            
-                wget.download(element_pdf_url, os.path.join(dir, wget.filename_from_url(element_pdf_url)+str(hash_number)+".pdf"))
+                element_pdf_link_article.click()
+                if self.driver.current_url == element_pdf_url:
+                    element_pdf_url = self.driver.find_element(By.CSS_SELECTOR, self.botton_download)
+                    element_pdf_url.click()
+                    element_pdf_url = self.driver.find_element(By.CSS_SELECTOR, self.botton_download).get_attribute("href")
+                    wget.download(element_pdf_url, os.path.join(dir, wget.filename_from_url(element_pdf_url)+str(hash_number)))
+                    self.driver.current_url == element_pdf_url
+                    self.driver.find_element(By.CSS_SELECTOR, self.botton_return).click()
+                else:
+                    wget.download(element_pdf_url, os.path.join(dir, wget.filename_from_url(element_pdf_url)+str(hash_number)))
             except HTTPError or NoSuchElementException:
                 print("\nError to download the PDF file")
-                pass
         except NoSuchElementException:
             print("\nPDF not available")
             pass
