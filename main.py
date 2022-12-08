@@ -136,7 +136,7 @@ class Aceno:
         try:
             element_pdf_link_article = element_box_info_text.find_element(By.CSS_SELECTOR, self.pdf_article)
             element_pdf_url = element_pdf_link_article.get_attribute("href")            
-            dir = "caribe/pdf"
+            dir = "aceno/pdf"
             if not os.path.exists(dir):
                 os.makedirs(dir)
             try:            
