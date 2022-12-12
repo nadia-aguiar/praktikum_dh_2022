@@ -21,7 +21,7 @@ class Aceno:
     def __init__(self, driver):
         self.driver = driver
     
-        self.url = "https://periodicoscientificos.ufmt.br/ojs/index.php/aceno/issue/archive" #url of the journal
+        self.url = "https://www.crolar.org/index.php/crolar/issue/archive" #"https://periodicoscientificos.ufmt.br/ojs/index.php/aceno/issue/archive" #url of the journal
         self.issue = "obj_issue_summary" #class
         self.date_issue = "title" # class
         self.issue_link = "href" # attribute
@@ -139,7 +139,7 @@ class Aceno:
             dir = "aceno/pdf"
             if not os.path.exists(dir):
                 os.makedirs(dir)
-            try:            
+            try:
                 element_pdf_link_article.click()
                 if self.driver.current_url == element_pdf_url:
                     element_pdf_url = self.driver.find_element(By.CSS_SELECTOR, self.botton_download)
@@ -193,6 +193,7 @@ class Aceno:
             link_articles = self.get_all_articles()
             for idx in range(len(link_articles)):
                 self.driver.get(link_articles[idx])
+                self.save_text_information()
                 self.save_files_pdf()
         self.driver.get(self.url)
         self.click_next_page()
