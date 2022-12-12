@@ -21,7 +21,7 @@ class Aceno:
     def __init__(self, driver):
         self.driver = driver
     
-        self.url = "https://www.crolar.org/index.php/crolar/issue/archive" #"https://periodicoscientificos.ufmt.br/ojs/index.php/aceno/issue/archive" #url of the journal
+        self.url = "https://periodicoscientificos.ufmt.br/ojs/index.php/aceno/issue/archive" #url of the journal
         self.issue = "obj_issue_summary" #class
         self.date_issue = "title" # class
         self.issue_link = "href" # attribute
